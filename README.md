@@ -1,9 +1,44 @@
 This is a list of things I wish I knew sooner about Python and it's popular modules.
 
+Take my advice with a grain of salt, I'm no python master, I'm simply telling you what I learnt 
+
 # don't use the requests library for request-heavy tasks
 The `requests` library always slows down over time. I'd recommend looking into `http.client` for consistent speeds, or `socket`s with ssl wrapping for the absolute best perf., more about this in the next section.
 
 https://github.com/psf/requests/issues/5726
+
+# if you're gonna use requests anyway, for god's sake use Sessions
+`requests.get/post` creates a connection then immediately closes it after receiving the response. When you're sending a bunch of requests, a lot of time is wasted on waiting for connections to be established.
+
+When you use a `requests.Session()`, connections are cached for later use:
+```python
+import requests
+import time
+
+for n in range(5):
+    raw_start_time = time.perf_counter()
+    requests.get("https://www.roblox.com/")
+    print(f"{time.perf_counter()-raw_start_time:.2f}s elapsed for requests.get no.{n+1}")
+
+with requests.Session() as session:
+    for n in range(5):
+        raw_start_time = time.perf_counter()
+        session.get("https://www.roblox.com/")
+        print(f"{time.perf_counter()-raw_start_time:.2f}s elapsed for requests.Session() no.{n+1}")
+```
+```
+0.22s elapsed for requests.get no.1
+0.21s elapsed for requests.get no.2
+0.21s elapsed for requests.get no.3
+0.21s elapsed for requests.get no.4
+0.22s elapsed for requests.get no.5
+
+0.22s elapsed for requests.Session() no.1
+0.14s elapsed for requests.Session() no.2
+0.14s elapsed for requests.Session() no.3
+0.17s elapsed for requests.Session() no.4
+0.14s elapsed for requests.Session() no.5
+```
 
 # socket + ssl
 Using sockets is probably the most optimized approach for sending HTTP requests in python. It won't bother parsing headers you won't need and it doesn't have 2 layers of HTTP libraries under it like `requests` does. It's great.
