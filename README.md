@@ -7,39 +7,6 @@ The `requests` library always slows down over time. I'd recommend looking into `
 
 https://github.com/psf/requests/issues/5726
 
-# if you're gonna use requests anyway, for god's sake use Sessions
-`requests.get/post` creates a connection then immediately closes it after receiving the response. When you're sending a bunch of requests, a lot of time is wasted on waiting for connections to be established.
-
-When you use a `requests.Session()`, connections are cached for later use:
-```python
-import requests
-import time
-
-for n in range(5):
-    raw_start_time = time.perf_counter()
-    requests.get("https://www.roblox.com/")
-    print(f"{time.perf_counter()-raw_start_time:.2f}s elapsed for requests.get no.{n+1}")
-
-with requests.Session() as session:
-    for n in range(5):
-        raw_start_time = time.perf_counter()
-        session.get("https://www.roblox.com/")
-        print(f"{time.perf_counter()-raw_start_time:.2f}s elapsed for requests.Session() no.{n+1}")
-```
-```
-0.22s elapsed for requests.get no.1
-0.21s elapsed for requests.get no.2
-0.21s elapsed for requests.get no.3
-0.21s elapsed for requests.get no.4
-0.22s elapsed for requests.get no.5
-
-0.22s elapsed for requests.Session() no.1
-0.14s elapsed for requests.Session() no.2
-0.14s elapsed for requests.Session() no.3
-0.17s elapsed for requests.Session() no.4
-0.14s elapsed for requests.Session() no.5
-```
-
 # socket + ssl
 Using sockets is probably the most optimized approach for sending HTTP requests in python. It won't bother parsing headers you won't need and it doesn't have 2 layers of HTTP libraries under it like `requests` does. It's great.
 
@@ -76,6 +43,39 @@ sock.close()
 ```
 
 In some cases simply following the `Content-Length` header isn't enough, and you'll have to worry about [chunked transfer encoding](https://en.wikipedia.org/wiki/Chunked_transfer_encoding).
+
+# if you're gonna use requests anyway, for god's sake use Sessions
+`requests.get/post` creates a connection then immediately closes it after receiving the response. When you're sending a bunch of requests, a lot of time is wasted on waiting for connections to be established.
+
+When you use a `requests.Session()`, connections are cached for later use:
+```python
+import requests
+import time
+
+for n in range(5):
+    raw_start_time = time.perf_counter()
+    requests.get("https://www.roblox.com/")
+    print(f"{time.perf_counter()-raw_start_time:.2f}s elapsed for requests.get no.{n+1}")
+
+with requests.Session() as session:
+    for n in range(5):
+        raw_start_time = time.perf_counter()
+        session.get("https://www.roblox.com/")
+        print(f"{time.perf_counter()-raw_start_time:.2f}s elapsed for requests.Session() no.{n+1}")
+```
+```
+0.22s elapsed for requests.get no.1
+0.21s elapsed for requests.get no.2
+0.21s elapsed for requests.get no.3
+0.21s elapsed for requests.get no.4
+0.22s elapsed for requests.get no.5
+
+0.22s elapsed for requests.Session() no.1
+0.14s elapsed for requests.Session() no.2
+0.14s elapsed for requests.Session() no.3
+0.17s elapsed for requests.Session() no.4
+0.14s elapsed for requests.Session() no.5
+```
 
 # combine multiprocessing and threading
 Threading performance peaks at around `50` threads, at higher amounts you may notice your script becoming jittery and unresponsive. To solve this problem you can use the `multiprocessing` library, which is essentially the same as launching your script multiple times in parallel, but with the benefit of being able to exchange data between running processes (this part is gonna look painful at first sight).
