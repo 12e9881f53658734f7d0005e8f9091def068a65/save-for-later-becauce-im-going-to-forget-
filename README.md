@@ -118,5 +118,5 @@ if __name__ == "__main__":
         print("Received message:", msg)
 ```
 
-# async won't magically make your code faster
+# async won't magically make your code run faster
 https://calpaterson.com/async-python-is-not-faster.html
