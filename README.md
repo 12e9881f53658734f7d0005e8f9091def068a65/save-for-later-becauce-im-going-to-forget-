@@ -23,7 +23,7 @@ sock = ssl_context.wrap_socket(
     server_side=False,
     do_handshake_on_connect=False,
     suppress_ragged_eofs=False,
-    server_hostname="google.com")
+    server_hostname="www.google.com")
 sock.do_handshake()
 
 # send HTTP request
