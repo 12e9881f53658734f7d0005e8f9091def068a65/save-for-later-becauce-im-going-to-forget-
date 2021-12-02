@@ -31,6 +31,11 @@ sock.sendall(b"GET /robots.txt HTTP/1.1\r\nHost: www.google.com\r\n\r\n")
 # get HTTP response
 resp = sock.recv(1024 ** 2)
 print(resp)
+
+# close connection
+try: sock.shutdown(2)
+except OSError: pass
+sock.close()
 ```
 
 In some cases simply following the `Content-Length` header isn't enough, and you'll have to worry about [chunked transfer encoding](https://en.wikipedia.org/wiki/Chunked_transfer_encoding).
