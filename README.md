@@ -1,6 +1,6 @@
 This is a list of things I wish I knew sooner about Python and it's popular modules.
 
-Take my advice with a grain of salt, I'm no python master, I'm simply sharing what I learnt over the past couple of years.
+Take my advice with a grain of salt, I'm no python master, I'm simply just sharing what I learnt over the past couple of years.
 
 # don't use the requests library for request-heavy tasks
 The `requests` library always slows down over time. I'd recommend looking into `http.client` for consistent speeds, or `socket`s with ssl wrapping for the absolute best perf., more about this in the next section.
