@@ -80,6 +80,8 @@ with requests.Session() as session:
 # combine multiprocessing and threading
 Threading performance peaks at around `50` threads, at higher amounts you may notice your script becoming jittery and unresponsive. To solve this problem you can use the `multiprocessing` library, which is essentially the same as launching your script multiple times in parallel, but with the benefit of being able to exchange data between running processes (this part is gonna look painful at first sight).
 
+Any mutable variables should be defined in `worker_func` or `thread_func` BUT definitely not passed to `worker_func`, unless you're sure it's mutable properties won't be used, or the object is specifically designed to be multiprocessing-compatible (`multiprocessing.Queue`, `multiprocessing.Value`, ..)
+
 ```python
 import multiprocessing
 import threading
