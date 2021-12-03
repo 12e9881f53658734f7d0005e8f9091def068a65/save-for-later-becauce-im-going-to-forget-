@@ -19,7 +19,7 @@ ssl_context = ssl.create_default_context()
 
 sock = socket.socket()
 sock.settimeout(5)
-sock.connect(("www.google.com", 443))
+sock.connect(("www.roblox.com", 443))
 
 # establish SSL connection
 sock = ssl_context.wrap_socket(
@@ -27,14 +27,21 @@ sock = ssl_context.wrap_socket(
     server_side=False,
     do_handshake_on_connect=False,
     suppress_ragged_eofs=False,
-    server_hostname="www.google.com")
+    server_hostname="www.roblox.com")
 sock.do_handshake()
 
 # send HTTP request
-sock.sendall(b"GET /robots.txt HTTP/1.1\r\nHost: www.google.com\r\n\r\n")
+sock.sendall(b"GET /robots.txt HTTP/1.1\r\nHost: www.roblox.com\r\n\r\n")
 # get HTTP response
-resp = sock.recv(1024 ** 2)
-print(resp)
+response, body = sock.recv(1024 ** 2).split(b"\r\n\r\n", 1)
+# receive rest of body
+content_length = int(response \
+    .split(b"content-length: ", 1)[1] \
+    .split(b"\r\n", 1)[0])
+while content_length > len(body):
+    body += sock.recv(1024 ** 2)
+
+print(body)
 
 # close connection
 try: sock.shutdown(2)
