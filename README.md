@@ -3,11 +3,11 @@ This is a list of things I wish I knew sooner about Python and it's popular modu
 Take my advice with a grain of salt, I'm no python master, I'm simply just sharing what I learnt over the past couple of years.
 
 # don't use the requests library for request-heavy tasks
-The `requests` library always slows down over time. I'd recommend looking into `http.client` for consistent speeds, or `socket`s with ssl wrapping for the absolute best perf., more about this in the next section.
+The `requests` library always slows down over time. I'd recommend looking into `http.client` for consistent speeds, or `socket`s with SSL wrapping for the absolute best perf., more about this in the next section.
 
 https://github.com/psf/requests/issues/5726
 
-# socket + ssl
+# sockets + SSL
 Using sockets is probably the most optimized approach for sending HTTP requests in python. It won't bother parsing headers you won't need and it doesn't have 2 layers of HTTP libraries under it like `requests` does. It's great.
 
 ```python
