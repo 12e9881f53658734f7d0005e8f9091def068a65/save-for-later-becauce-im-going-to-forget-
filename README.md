@@ -7,7 +7,7 @@ The `requests` library always slows down over time. I'd recommend looking into `
 
 https://github.com/psf/requests/issues/5726
 
-# sockets + SSL
+# sockets + SSL wrapping
 Using sockets is probably the most optimized approach for sending HTTP requests in python. It won't bother parsing headers you won't need and it doesn't have 2 layers of HTTP libraries under it like `requests` does. It's great.
 
 ```python
