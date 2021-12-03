@@ -14,7 +14,7 @@ Using sockets is probably the most optimized approach for sending HTTP requests 
 import socket
 import ssl
 
-# keep this a global in all cases for optimized perf.
+# use a single SSL context for all conn. for optimized perf.
 ssl_context = ssl.create_default_context()
 
 sock = socket.socket()
