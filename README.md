@@ -56,7 +56,7 @@ except OSError: pass
 sock.close()
 ```
 
-In some cases simply following the `Content-Length` header isn't enough, and you'll have to worry about [chunked transfer encoding](https://en.wikipedia.org/wiki/Chunked_transfer_encoding).
+In some cases simply following the `Content-Length` header isn't enough, and you'll have to implement [chunked transfer encoding](https://en.wikipedia.org/wiki/Chunked_transfer_encoding).
 
 # if you're gonna use requests anyway, for god's sake use Sessions
 `requests.get/post` creates a connection then immediately closes it after receiving the response. When you're sending a bunch of requests, a lot of time is wasted on waiting for connections to be established.
