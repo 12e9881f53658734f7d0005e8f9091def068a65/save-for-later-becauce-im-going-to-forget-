@@ -30,18 +30,18 @@ sock = ssl_context.wrap_socket(
     server_hostname="www.roblox.com")
 sock.do_handshake()
 
-# send HTTP request
-sock.sendall(b"GET /robots.txt HTTP/1.1\r\nHost: www.roblox.com\r\n\r\n")
-# get HTTP response
-response, body = sock.recv(1024 ** 2).split(b"\r\n\r\n", 1)
-# receive rest of body
-content_length = int(response \
-    .split(b"content-length: ", 1)[1] \
-    .split(b"\r\n", 1)[0])
-while content_length > len(body):
-    body += sock.recv(1024 ** 2)
-
-print(body)
+# send HTTP requests
+for _ in range(3):
+    sock.sendall(b"GET /robots.txt HTTP/1.1\r\nHost: www.roblox.com\r\n\r\n")
+    # get HTTP response
+    response, body = sock.recv(1024 ** 2).split(b"\r\n\r\n", 1)
+    # receive rest of body
+    content_length = int(response \
+        .split(b"content-length: ", 1)[1] \
+        .split(b"\r\n", 1)[0])
+    while content_length > len(body):
+        body += sock.recv(1024 ** 2)
+    print(body)
 
 # close connection
 try: sock.shutdown(2)
