@@ -14,6 +14,7 @@ Using sockets is probably the most optimized approach for sending HTTP requests 
 import socket
 import ssl
 
+blocksize = 1024 ** 2
 # use a single SSL context for all conn. for optimized perf.
 ssl_context = ssl.create_default_context()
 
@@ -34,13 +35,13 @@ sock.do_handshake()
 for _ in range(3):
     sock.sendall(b"GET /robots.txt HTTP/1.1\r\nHost: www.roblox.com\r\n\r\n")
     # get HTTP response
-    response, body = sock.recv(1024 ** 2).split(b"\r\n\r\n", 1)
+    response, body = sock.recv(blocksize).split(b"\r\n\r\n", 1)
     # receive rest of body
     content_length = int(response \
         .split(b"content-length: ", 1)[1] \
         .split(b"\r\n", 1)[0])
     while content_length > len(body):
-        body += sock.recv(1024 ** 2)
+        body += sock.recv(blocksize)
     print(body)
 
 # close connection
