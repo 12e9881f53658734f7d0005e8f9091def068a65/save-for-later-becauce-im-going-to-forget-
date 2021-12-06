@@ -18,11 +18,12 @@ blocksize = 1024 ** 2
 # use a single SSL context for all conn. for optimized perf.
 ssl_context = ssl.create_default_context()
 
+# establish TCP conn. to server
 sock = socket.socket()
 sock.settimeout(5)
 sock.connect(("www.roblox.com", 443))
 
-# establish SSL connection
+# upgrade conn. to SSL
 sock = ssl_context.wrap_socket(
     sock,
     server_side=False,
