@@ -33,9 +33,14 @@ sock.do_handshake()
 
 # send HTTP requests
 for _ in range(3):
-    sock.sendall(b"GET /robots.txt HTTP/1.1\r\nHost: www.roblox.com\r\n\r\n")
+    sock.sendall(
+        b"GET /robots.txt HTTP/1.1\r\n"
+        b"Host: www.roblox.com\r\n"
+        b"\r\n")
     # get HTTP response
-    response, body = sock.recv(blocksize).split(b"\r\n\r\n", 1)
+    response, body = sock \
+        .recv(blocksize) \
+        .split(b"\r\n\r\n", 1)
     # receive rest of body
     content_length = int(response \
         .split(b"content-length: ", 1)[1] \
